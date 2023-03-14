@@ -17,6 +17,17 @@ void InitPipelineState(PipelineState& pipelineState, RootSignature& rs, Shader& 
 ///////////////////////////////////////////////////////////////////
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
+    const double PI = 3.14159265358979323846; // 円周率
+    const int sides = 5; // 正五角形の辺の数
+    float position[sides][2];
+    for (int i = 0; i < sides; i++) {
+        double angle = 2 * PI / sides * i; // 角度を計算する
+        double x = cos(angle); // x座標を計算する
+        double y = sin(angle); // y座標を計算する
+        position[i][0] = x;
+        position[i][1] = y;
+    }
+
     // ゲームの初期化
     InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Game"));
 
@@ -41,16 +52,24 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     // 頂点配列を定義
     SimpleVertex vertices[] = {
         {
-            {-0.5f, -0.5f, 0.0f},
-            { 1.0f, 0.0f, 0.0f }
+            { position[0][0], position[0][1], 0.0f},
+            { 1.0f , 0.0f , 0.0f }
         },
         {
-            { 0.0f, 0.5f, 0.0f },
-            { 0.0f, 1.0f, 0.0f }
+            {  position[1][0], position[1][1], 0.0f },
+            { 0.0f , 1.0f , 0.0f }
         },
         {
-            { 0.5f, -0.5f, 0.0f },
-            { 0.0f, 0.0f, 1.0f }
+            { position[2][0], position[2][1], 0.0f },
+            { 0.0f , 0.0f , 1.0f }
+        },
+        {
+            {  position[3][0], position[3][1], 0.0f },
+            { 1.0f , 0.0f , 1.0f }
+        },
+        {
+            {  position[4][0], position[4][1], 0.0f },
+            { 0.0f , 1.0f , 1.0f }
         }
     };
 
@@ -61,7 +80,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     // 5. 三角形のインデックスバッファを作成
     //インデックス配列
     uint16_t indices[] = {
-        0,1,2
+        0,1,2,
+        0,2,3,
+        0,3,4
     };
     IndexBuffer triangleIB;
     triangleIB.Init(sizeof(indices), 2);
@@ -93,7 +114,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         // 5. インデックスバッファを設定
         renderContext.SetIndexBuffer(triangleIB);
         // 6. ドローコール
-        renderContext.DrawIndexed(3);
+        renderContext.DrawIndexed(_countof(indices));
 
         /// //////////////////////////////////////
         // 絵を描くコードを書くのはここまで！！！
@@ -105,12 +126,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 }
 
 // ルートシグネチャの初期化
-void InitRootSignature( RootSignature& rs )
+void InitRootSignature(RootSignature& rs)
 {
     rs.Init(D3D12_FILTER_MIN_MAG_MIP_LINEAR,
-            D3D12_TEXTURE_ADDRESS_MODE_WRAP,
-            D3D12_TEXTURE_ADDRESS_MODE_WRAP,
-            D3D12_TEXTURE_ADDRESS_MODE_WRAP);
+        D3D12_TEXTURE_ADDRESS_MODE_WRAP,
+        D3D12_TEXTURE_ADDRESS_MODE_WRAP,
+        D3D12_TEXTURE_ADDRESS_MODE_WRAP);
 }
 
 // パイプラインステートの初期化

@@ -6,9 +6,9 @@
 /// </summary>
 struct DirectionLight
 {
-    Vector3 direction;  //ライトの方向
+    Vector3 direction;  // ライトの方向
     float pad0;
-    Vector3 color;      //ライトのカラー
+    Vector3 color;      // ライトのカラー
     float pad1;
 };
 
@@ -19,6 +19,8 @@ struct Light
 {
     DirectionLight directionLight;  // ディレクションライト
     Vector3 eyePos;                 // 視点の位置
+    float pad1;
+    Vector3 ambientLight;           // 環境光
 };
 
 ///////////////////////////////////////////////////////////////////
@@ -32,6 +34,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     //////////////////////////////////////
     // ここから初期化を行うコードを記述する
     //////////////////////////////////////
+
     g_camera3D->SetPosition({ 0.0f, 0.0f, 100.0f });
     g_camera3D->SetTarget({ 0.0f, 0.0f, 0.0f });
 
@@ -52,13 +55,17 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     // 視点の位置を設定する
     light.eyePos = g_camera3D->GetPosition();
 
+    light.ambientLight.x = 0.3f;
+    light.ambientLight.y = 0.3f;
+    light.ambientLight.z = 0.3f;
+
     // モデルを初期化する
     // モデルを初期化するための情報を構築する
     ModelInitData modelInitData;
     modelInitData.m_tkmFilePath = "Assets/modelData/teapot.tkm";
 
     // 使用するシェーダーファイルパスを設定する
-    modelInitData.m_fxFilePath = "Assets/shader/sample.fx";
+    modelInitData.m_fxFilePath = "Assets/shader/sample.after_constant_buffer.fx";
 
     // ディレクションライトの情報を定数バッファとしてディスクリプタヒープに登録するために
     // モデルの初期化情報として渡す

@@ -65,7 +65,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     modelInitData.m_tkmFilePath = "Assets/modelData/teapot.tkm";
 
     // 使用するシェーダーファイルパスを設定する
-    modelInitData.m_fxFilePath = "Assets/shader/sample.fx";
+    modelInitData.m_fxFilePath = "Assets/shader/sample.after_constant_buffer.fx";
 
     // ディレクションライトの情報を定数バッファとしてディスクリプタヒープに登録するために
     // モデルの初期化情報として渡す

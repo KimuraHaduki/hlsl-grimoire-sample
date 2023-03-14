@@ -87,6 +87,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
     {
         t = 0.0f;
     }
+    
 
     // 拡散反射光を求める
     float3 diffuseLig = directionLight.color * t;
